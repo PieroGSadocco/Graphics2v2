@@ -1,0 +1,26 @@
+STARTING PROGRAM;
+
+OPENING WINDOW
+	Supported OpenGL Version:
+		4.3.0 - Build 10.18.15.4268
+	Chosen pixel format is MSAA with num samples:
+		8
+	Could not create an OpenGL context:
+		4.5
+	Created an OpenGL context:
+		4.4
+	Created an WindowOGL with context:
+		4.4
+	Maximum number of 4-component vertex attributes supported: 16
+WINDOW OPENING COMPLETE
+
+LOADING/COMPILING SHADERS
+Shaders Loaded/Compiled SUCCESS
+
+Texture BMP: "res/154.bmp" Loaded Properly.
+
+Texture BMP: "res/154_norm.bmp" Loaded Properly.
+
+Texture BMP: "res/cube.bmp" Loaded Properly.
+
+CLOSING WINDOW

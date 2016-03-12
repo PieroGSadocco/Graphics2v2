@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="H">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="C++">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="RES">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="TODO">
+      <UniqueIdentifier>{65d39043-7de4-4006-9adc-576c04fa6b4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TODO\GEN">
+      <UniqueIdentifier>{790b904b-15e2-4fef-8ad5-c9f048d6cdaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TODO\OGL">
+      <UniqueIdentifier>{edb35dbc-806d-4258-bae2-b8f6bebf43aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TODO\ORG">
+      <UniqueIdentifier>{a192e5d2-ddde-4048-8b93-9ec3da0ac7b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="H\UTIL">
+      <UniqueIdentifier>{f8be2671-47ef-438c-a1c2-98c56a7923da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="H\API">
+      <UniqueIdentifier>{dcae7ac8-a079-4528-ab90-a137e35cb088}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="H\ORG">
+      <UniqueIdentifier>{adf5ee30-8369-4438-be1a-b346ce0b0ddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="H\ABSTRACT">
+      <UniqueIdentifier>{f036559b-36cf-4d1a-bb10-10097019fda0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="STRUCTS">
+      <UniqueIdentifier>{f5ee2fca-5dee-48f3-9022-42947727834b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Logger.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowOGL4x.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mesh.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="AmbientLight.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh2.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DataPack.h">
+      <Filter>TODO\ORG</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>TODO\GEN</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>TODO\ORG</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>TODO\ORG</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>TODO\ORG</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewport.h">
+      <Filter>TODO\OGL</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>H\UTIL</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowOGL4x.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Matrix.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>H\ORG</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>H</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>H</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>H</Filter>
+    </ClInclude>
+    <ClInclude Include="AmbientLight.h">
+      <Filter>H</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>H</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh2.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshOGL.h">
+      <Filter>STRUCTS</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="color.vs">
+      <Filter>RES</Filter>
+    </None>
+    <None Include="color.ps">
+      <Filter>RES</Filter>
+    </None>
+  </ItemGroup>
+</Project>

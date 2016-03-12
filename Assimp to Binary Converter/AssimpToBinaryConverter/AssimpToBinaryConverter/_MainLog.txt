@@ -1,0 +1,6 @@
+What do you want to do?
+	1 -> Convert all files in this directory;
+	2 -> See how to load a file;
+	3 -> Convert a specific file;
+	4 -> Exit;
+
