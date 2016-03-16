@@ -1,6 +1,5 @@
 #include "Loader.h"
 
-//*
 #include "Logger.h"
 #include <string>
 
@@ -372,6 +371,7 @@ void Loader::LoadOBJ(std::string _path, Mesh& _mesh)
 	_mesh.SetUpData(data, indices);
 }
 
+/*
 void Loader::LoadBinaryMesh(std::string _path, MeshOGL*& _mesh, unsigned int& _numMeshes)
 {
 	struct MeshData
@@ -464,3 +464,143 @@ void Loader::LoadBinaryMesh(std::string _path, MeshOGL*& _mesh, unsigned int& _n
 	delete[] meshes;
 }
 //*/
+
+void Loader::LoadBinaryMesh2(std::string _path, MeshOGL*& _mesh, unsigned int& _numMeshes)
+{
+	struct MeshData
+	{
+		unsigned int positions;
+		unsigned int uvs;
+		unsigned int normals;
+		unsigned int tangents;
+		unsigned int biTangents;
+
+		unsigned int numData;
+		float* data;
+
+		unsigned int numIndices;
+		unsigned int* indices;
+
+		MeshData()
+		{
+			positions = -1;
+			uvs = -1;
+			normals = -1;
+			tangents = -1;
+			biTangents = -1;
+
+			numData = -1;
+			numIndices = -1;
+
+			data = nullptr;
+			indices = nullptr;
+		}
+
+		~MeshData()
+		{
+			if (data != nullptr)
+				delete[] data;
+			if (indices != nullptr)
+				delete[] indices;
+		}
+	};
+
+	MeshData* meshes;
+
+	//Load
+	std::ifstream file(_path, std::ifstream::binary);
+
+	if (!file.is_open())
+	{
+		std::string str = "ERROR: Failed to open: \""; str += _path; str += "\";";
+		Logger::Log(str);
+		return;
+	}
+
+	file.read((char*)&_numMeshes, sizeof(unsigned int));
+
+	meshes = new MeshData[_numMeshes];
+
+	for (unsigned int i = 0; i != _numMeshes; ++i)
+	{
+		//positions
+		file.read((char*)&meshes[i].positions, sizeof(unsigned int));
+		//uvs
+		file.read((char*)&meshes[i].uvs, sizeof(unsigned int));
+		//normals
+		file.read((char*)&meshes[i].normals, sizeof(unsigned int));
+		//tangents
+		file.read((char*)&meshes[i].tangents, sizeof(unsigned int));
+		//bitangents
+		file.read((char*)&meshes[i].biTangents, sizeof(unsigned int));
+
+		//vert Size
+		file.read((char*)&meshes[i].numData, sizeof(unsigned int));
+		//vert Data
+		meshes[i].data = new float[meshes[i].numData];
+		file.read((char*)&(*meshes[i].data), meshes[i].numData * sizeof(float));
+		//ind Size
+		file.read((char*)&meshes[i].numIndices, sizeof(unsigned int));
+		//ind Data
+		meshes[i].indices = new unsigned int[meshes[i].numIndices];
+		file.read((char*)&(*meshes[i].indices), meshes[i].numIndices * sizeof(unsigned int));
+	}
+
+	// OGL part
+	_mesh = new MeshOGL[_numMeshes];
+
+	for (unsigned int i = 0; i != _numMeshes; ++i)
+	{
+		_mesh->numIndices = meshes[i].numIndices;
+
+		glGenVertexArrays(1, &_mesh->VAO);
+		glGenBuffers(1, &_mesh->VBO);
+		glGenBuffers(1, &_mesh->EBO);
+
+		glBindVertexArray(_mesh->VAO);
+
+		glBindBuffer(GL_ARRAY_BUFFER, _mesh->VBO);
+		glBufferData(GL_ARRAY_BUFFER, meshes[i].numData * sizeof(float), meshes[i].data, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _mesh->EBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshes[i].numIndices * sizeof(unsigned int), meshes[i].indices, GL_STATIC_DRAW);
+
+		// Position attribute //0, 1, 2
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)0);
+		glEnableVertexAttribArray(0);
+		// Color attribute
+
+		// UV attribute // 3, 4
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(2);
+		// Normal attribute // 5, 6, 7
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(5 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(3);
+		// Tangent attribute // 8, 9, 10
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(8 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(4);
+		// Bitangent attribute // 11, 12, 13
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 14 * sizeof(GLfloat), (GLvoid*)(11 * sizeof(GLfloat)));
+		glEnableVertexAttribArray(5);
+
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
+	}
+
+	// release data
+	delete[] meshes;
+}
+
+void Loader::LoadTxt(std::string _path, std::string& _str)
+{
+	std::ifstream file(_path);
+
+	if (!file.is_open())
+	{
+		std::string str = "ERROR: Failed to open: \""; str += _path; str += "\";";
+		Logger::Log(str);
+		return;
+	}
+
+	_str = std::string((std::istreambuf_iterator<char>(file)), (std::istreambuf_iterator<char>()));
+}

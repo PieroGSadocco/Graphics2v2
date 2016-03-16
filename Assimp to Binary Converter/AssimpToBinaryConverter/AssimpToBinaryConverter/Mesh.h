@@ -17,8 +17,10 @@ public:
 	struct VertexStruct
 	{
 		float px, py, pz;
-		float nx, ny, nz;
 		float u, v;
+		float nx, ny, nz;
+		float tx, ty, tz;
+		float bx, by, bz;
 	};
 
 	struct TextureStruct
@@ -31,9 +33,13 @@ public:
 	std::vector<GLuint> indices;
 	std::vector<TextureStruct> textures;
 
-	int type;
+	unsigned int pos;
+	unsigned int uv;
+	unsigned int normal;
+	unsigned int tangent;
+	unsigned int biTangent;
 
-	Mesh(std::vector<float> vertices, std::vector<GLuint> indices, std::vector<TextureStruct> textures, int _type);
+	Mesh(std::vector<float> _vertices, std::vector<GLuint> _indices, std::vector<TextureStruct> _textures, unsigned int _pos, unsigned int _uv, unsigned int _normal, unsigned int _tangent, unsigned int _bitangent);
 	~Mesh();
 
 private:

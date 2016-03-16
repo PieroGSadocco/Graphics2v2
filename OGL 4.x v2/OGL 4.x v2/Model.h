@@ -4,9 +4,10 @@
 #include "Loader.h"
 #include "MeshOGL.h"
 
-#include "Shader.h"
 #include "Matrix.h"
 #include "Texture.h"
+
+class Shader;
 
 class Model
 {

@@ -4,10 +4,14 @@
 #include "GL\glew.h"
 #include "GL\wglew.h"
 
+#include <string>
+
+#include "Loader.h"
+
 class Shader
 {
 public:
-	Shader();
+	Shader(std::string _vertexShaderPath, std::string _geometryShaderPath, std::string _fragmentShaderPath);
 	~Shader();
 
 	void Bind();
@@ -21,6 +25,8 @@ private:
 	GLint geometryShader;
 
 	GLint shaderProgram;
+
+	void BuildAndCompileShader(std::string& _vertexShaderPath, std::string& _geometryShaderPath, std::string& _fragmentShaderPath);
 };
 
 #endif

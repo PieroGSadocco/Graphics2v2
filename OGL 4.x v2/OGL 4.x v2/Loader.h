@@ -24,8 +24,11 @@ private:
 
 public:
 	void LoadOBJ(std::string _path, Mesh& _mesh);
-	void LoadBinaryMesh(std::string _path, MeshOGL*& _mesh, unsigned int& _numMeshes);
+	
+	//void LoadBinaryMesh(std::string _path, MeshOGL*& _mesh, unsigned int& _numMeshes);
+	void LoadBinaryMesh2(std::string _path, MeshOGL*& _mesh, unsigned int& _numMeshes);
 
+	void LoadTxt(std::string _path, std::string& _str);
 private:
 
 };

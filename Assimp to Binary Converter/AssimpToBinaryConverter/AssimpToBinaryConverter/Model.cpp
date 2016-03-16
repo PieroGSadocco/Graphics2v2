@@ -4,11 +4,17 @@
 
 #include <fstream>
 
+#include <Windows.h>
+
 
 void Model::loadModel(std::string path)
 {
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+	//http://assimp.sourceforge.net/lib_html/postprocess_8h.html
+	//aiProcess_GenNormals 
+	//aiProcess_GenSmoothNormals 
+	//											 triangulate			 flip uv y			 avoid duplicate verts			   make norms if not	  make bitangent and tangent
+	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices | aiProcess_GenNormals | aiProcess_CalcTangentSpace);
 
 	if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -63,16 +69,123 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<float> vertices;
 	std::vector<GLuint> indices;
 	std::vector<Mesh::TextureStruct> textures;
-	int type = 0;
 
-	//find type
-	// mesh type
-	// 0 = pos,		uv,			normal								pun
-	// 1 = pos,		uv												pu
-	// 2 = pos,		normal											pn
-	// 3 = pos,		uv,			normal,		tangent,	bitangent	puntb
-	// 4 = pos,		normal,		tangent,	bitangent				pntb
+	// mesh bools !0 = false
+	unsigned int pos = 1;
+	unsigned int uv = 1;
+	unsigned int normal = 1;
+	unsigned int tangent = 1;
+	unsigned int bitangent = 1;
 
+	std::cout << "Do you want pos, uv, norm, tang and biTang? (y/n)\n";
+	while (!GetAsyncKeyState('Y') || !GetAsyncKeyState('N'))
+	{
+		if (GetAsyncKeyState('Y'))
+		{
+			pos = 0;
+			uv = 0;
+			normal = 0;
+			tangent = 0;
+			bitangent = 0;
+			std::cout << "Yes to all.\n\n";
+			break;
+		}
+		else if (GetAsyncKeyState('N'))
+		{
+			std::cout << "Do you want Positions? (y/n)\n";
+			Sleep(500);
+			while (!GetAsyncKeyState('Y') || !GetAsyncKeyState('N'))
+			{
+				if (GetAsyncKeyState('Y'))
+				{
+					pos = 0;
+					std::cout << "Yes\n";
+					Sleep(500);
+					break;
+				}
+				else if (GetAsyncKeyState('N'))
+				{
+					std::cout << "No\n";
+					Sleep(500);
+					break;
+				}
+			}
+
+			std::cout << "Do you want UVs? (y/n)\n";
+			while (!GetAsyncKeyState('Y') || !GetAsyncKeyState('N'))
+			{
+				if (GetAsyncKeyState('Y'))
+				{
+					uv = 0;
+					std::cout << "Yes\n";
+					Sleep(500);
+					break;
+				}
+				else if (GetAsyncKeyState('N'))
+				{
+					std::cout << "No\n";
+					Sleep(500);
+					break;
+				}
+			}
+
+			std::cout << "Do you want Normals? (y/n)\n";
+			while (!GetAsyncKeyState('Y') || !GetAsyncKeyState('N'))
+			{
+				if (GetAsyncKeyState('Y'))
+				{
+					normal = 0;
+					std::cout << "Yes\n";
+					Sleep(500);
+					break;
+				}
+				else if (GetAsyncKeyState('N'))
+				{
+					std::cout << "No\n";
+					Sleep(500);
+					break;
+				}
+			}
+
+			std::cout << "Do you want Tangents? (y/n)\n";
+			while (!GetAsyncKeyState('Y') || !GetAsyncKeyState('N'))
+			{
+				if (GetAsyncKeyState('Y'))
+				{
+					tangent = 0;
+					std::cout << "Yes\n";
+					Sleep(500);
+					break;
+				}
+				else if (GetAsyncKeyState('N'))
+				{
+					std::cout << "No\n";
+					Sleep(500);
+					break;
+				}
+			}
+
+			std::cout << "Do you want BiTangents? (y/n)\n";
+			while (!GetAsyncKeyState('Y') || !GetAsyncKeyState('N'))
+			{
+				if (GetAsyncKeyState('Y'))
+				{
+					bitangent = 0;
+					std::cout << "Yes\n";
+					Sleep(500);
+					break;
+				}
+				else if (GetAsyncKeyState('N'))
+				{
+					std::cout << "No\n";
+					Sleep(500);
+					break;
+				}
+			}
+			break;
+		}
+	}
+	
 	// Walk through each of the mesh's vertices
 	for (GLuint i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -82,11 +195,6 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 		vertex.px = mesh->mVertices[i].x;
 		vertex.py = mesh->mVertices[i].y;
 		vertex.pz = mesh->mVertices[i].z;
-
-		// Normals
-		vertex.nx = mesh->mNormals[i].x;
-		vertex.ny = mesh->mNormals[i].y;
-		vertex.nz = mesh->mNormals[i].z;
 
 		// Texture Coordinates
 		if (mesh->mTextureCoords[0]) // Does the mesh contain texture coordinates?
@@ -100,16 +208,41 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 			vertex.v = 0.0f;
 		}
 
+		// Normals
+		vertex.nx = mesh->mNormals[i].x;
+		vertex.ny = mesh->mNormals[i].y;
+		vertex.nz = mesh->mNormals[i].z;
+
+		// Tangents
+		vertex.tx = mesh->mTangents[i].x;
+		vertex.ty = mesh->mTangents[i].y;
+		vertex.tz = mesh->mTangents[i].z;
+
+		// BiTangents
+		vertex.bx = mesh->mBitangents[i].x;
+		vertex.by = mesh->mBitangents[i].y;
+		vertex.bz = mesh->mBitangents[i].z;
+
+
+		// Positions
 		vertices.push_back(vertex.px);
 		vertices.push_back(vertex.py);
 		vertices.push_back(vertex.pz);
-
+		// Texture Coordinates
+		vertices.push_back(vertex.u);
+		vertices.push_back(vertex.v);
+		// Normals
 		vertices.push_back(vertex.nx);
 		vertices.push_back(vertex.ny);
 		vertices.push_back(vertex.nz);
-
-		vertices.push_back(vertex.u);
-		vertices.push_back(vertex.v);
+		// Tangents
+		vertices.push_back(vertex.tx);
+		vertices.push_back(vertex.ty);
+		vertices.push_back(vertex.tz);
+		// BiTangents
+		vertices.push_back(vertex.bx);
+		vertices.push_back(vertex.by);
+		vertices.push_back(vertex.bz);
 	}
 
 	// Now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
@@ -140,7 +273,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	// Return a mesh object created from the extracted mesh data
-	return Mesh(vertices, indices, textures, type);
+	return Mesh(vertices, indices, textures, pos, uv, normal, tangent, bitangent);
 }
 
 std::vector<Mesh::TextureStruct> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
@@ -166,16 +299,20 @@ std::vector<Mesh::TextureStruct> Model::loadMaterialTextures(aiMaterial* mat, ai
 
 
 
-struct MeshData
-{
-	unsigned int dataType;
-
-	unsigned int numData;
-	float* data;
-
-	unsigned int numIndices;
-	unsigned int* indices;
-};
+//struct MeshData
+//{
+//	unsigned int pos;
+//	unsigned int uv;
+//	unsigned int normal;
+//	unsigned int tangent;
+//	//unsigned int biTangent;
+//
+//	unsigned int numData;
+//	float* data;
+//
+//	unsigned int numIndices;
+//	unsigned int* indices;
+//};
 
 void Model::CreateBinaryFile()
 {
@@ -189,15 +326,17 @@ void Model::CreateBinaryFile()
 	// for every mesh
 	for (int i = 0; i != meshes.size(); ++i)
 	{
-		unsigned int type = meshes[i].type;
-		file.write((const char*)&type, sizeof(type));
-		// write mesh type
-		// 0 = pos,		uv,			normal								pun
-		// 1 = pos,		uv												pu
-		// 2 = pos,		normal											pn
-		// 3 = pos,		uv,			normal,		tangent,	bitangent	puntb
-		// 4 = pos,		normal,		tangent,	bitangent				pntb
-		
+		// write mesh pos;
+		file.write((const char*)&meshes[i].pos, sizeof(unsigned int));
+		// write mesh uv;
+		file.write((const char*)&meshes[i].uv, sizeof(unsigned int));
+		// write mesh normal;
+		file.write((const char*)&meshes[i].normal, sizeof(unsigned int));
+		// write mesh tangent;
+		file.write((const char*)&meshes[i].tangent, sizeof(unsigned int));
+		// write mesh biTangent;
+		file.write((const char*)&meshes[i].biTangent, sizeof(unsigned int));
+
 		// write mesh vertices size
 		unsigned int vSize = meshes[i].vertices.size();
 		file.write((const char*)&vSize, sizeof(unsigned int));
@@ -214,37 +353,42 @@ void Model::CreateBinaryFile()
 	}
 	file.close();
 
-	// open file
-	std::ifstream testFile(name, std::ifstream::binary);
-	
-	MeshData* mData;
-	
-	// get num meshes
-	unsigned int numMesh;
-	testFile.read((char*)&numMesh, sizeof(unsigned int));
-	
-	//create MeshData
-	mData = new MeshData[numMesh];
-	
-	// for every mesh
-	for (unsigned int i = 0; i != numMesh; ++i)
-	{
-		// get mesh type
-		testFile.read((char*)&mData[i].dataType, sizeof(unsigned int));
-		
-		// get mesh vertices size
-		testFile.read((char*)&mData[i].numData, sizeof(unsigned int));
-	
-		// get mesh vertices
-		mData[i].data = new float[mData[i].numData];
-		testFile.read((char*)&(*mData[i].data), mData[i].numData * sizeof(float));
-	
-		// get mesh indices size
-		testFile.read((char*)&mData[i].numIndices, sizeof(unsigned int));
-		
-		// get mesh indices
-		mData[i].indices = new unsigned int[mData[i].numIndices];
-		testFile.read((char*)&*mData[i].indices, mData[i].numIndices * sizeof(GLuint));
-	
-	}
+//	// open file
+//	std::ifstream testFile(name, std::ifstream::binary);
+//	
+//	MeshData* mData;
+//	
+//	// read num meshes
+//	unsigned int numMeshes = meshes.size();
+//	testFile.read((char*)&numMeshes, sizeof(numMeshes));
+//
+//	// for every mesh
+//	for (int i = 0; i != meshes.size(); ++i)
+//	{
+//		// read mesh pos;
+//		testFile.read((char*)&meshes[i].pos, sizeof(unsigned int));
+//		// read mesh uv;
+//		testFile.read((char*)&meshes[i].uv, sizeof(unsigned int));
+//		// read mesh normal;
+//		testFile.read((char*)&meshes[i].normal, sizeof(unsigned int));
+//		// read mesh tangent;
+//		testFile.read((char*)&meshes[i].tangent, sizeof(unsigned int));
+//		// read mesh biTangent;
+//		testFile.read((char*)&meshes[i].biTangent, sizeof(unsigned int));
+//
+//		// read mesh vertices size
+//		unsigned int vSize = meshes[i].vertices.size();
+//		testFile.read((char*)&vSize, sizeof(unsigned int));
+//
+//		// read mesh vertices
+//		testFile.read((char*)&meshes[i].vertices[0], sizeof(float) * meshes[i].vertices.size());
+//
+//		// read mesh indices size
+//		unsigned int iSize = meshes[i].indices.size();
+//		testFile.read((char*)&iSize, sizeof(unsigned int));
+//
+//		// read mesh indices
+//		testFile.read((char*)&meshes[i].indices[0], sizeof(GLuint) * meshes[i].indices.size());
+//	}
+//	testFile.close();
 }

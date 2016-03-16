@@ -1,11 +1,13 @@
 #include "Model.h"
 
+#include "Shader.h"
+
 Model::Model(std::string _path)
 {
 	numMeshes = 0;
 	meshesOGL = nullptr;
 	Loader loader;
-	loader.LoadBinaryMesh(_path, meshesOGL, numMeshes);
+	loader.LoadBinaryMesh2(_path, meshesOGL, numMeshes);
 }
 
 Model::~Model()

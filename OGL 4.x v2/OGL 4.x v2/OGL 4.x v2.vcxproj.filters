@@ -40,6 +40,9 @@
     <Filter Include="STRUCTS">
       <UniqueIdentifier>{f5ee2fca-5dee-48f3-9022-42947727834b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="RES\SHADERS">
+      <UniqueIdentifier>{1da45080-574e-4d9b-a7b4-d57ecc9ca0b3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -161,11 +164,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="color.vs">
-      <Filter>RES</Filter>
-    </None>
-    <None Include="color.ps">
-      <Filter>RES</Filter>
+    <None Include="res\shaders\ExplodeMesh.vertexShader">
+      <Filter>RES\SHADERS</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include <GL/glew.h>
+#include "GL/glew.h"
 
 #include <stdio.h>
 #include <stdlib.h>

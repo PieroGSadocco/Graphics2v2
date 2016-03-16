@@ -2,7 +2,7 @@ STARTING PROGRAM;
 
 OPENING WINDOW
 	Supported OpenGL Version:
-		4.3.0 - Build 10.18.15.4268
+		4.4.0 - Build 10.18.15.4281
 	Chosen pixel format is MSAA with num samples:
 		8
 	Could not create an OpenGL context:
@@ -15,6 +15,7 @@ OPENING WINDOW
 WINDOW OPENING COMPLETE
 
 LOADING/COMPILING SHADERS
+ERROR: Failed to open: "poop";
 Shaders Loaded/Compiled SUCCESS
 
 Texture BMP: "res/154.bmp" Loaded Properly.

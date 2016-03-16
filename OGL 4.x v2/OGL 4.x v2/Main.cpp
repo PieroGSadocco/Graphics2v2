@@ -45,7 +45,7 @@ int main()
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(1181);
 
-	MoveWindow(GetConsoleWindow(), 0, 0, 835, 600, true);
+	MoveWindow(GetConsoleWindow(), 0, 0, 1024, 800, true);
 
 	Logger::Clear();
 
@@ -54,7 +54,7 @@ int main()
 	Logger::Log("STARTING PROGRAM;\n");
 
 	//Window
-	WindowOGL4x* window = new WindowOGL4x("Game Name", "A", 820, 0, 800, 600, 4, 5);
+	WindowOGL4x* window = new WindowOGL4x("Game Name", "A", 1124, 0, 1024, 720, 4, 5);
 
 	Logger::Log("LOADING/COMPILING SHADERS");
 
@@ -76,8 +76,10 @@ int main()
 	GetCursorPos(&oldMousePos);
 
 	// SHADERS
-	Shader* shader = new Shader();
-
+	//Shader* shader = new Shader();
+	//Shader* shaderExplodeMesh = new Shader("res/shaders/ExplodeMesh.vertexShader","res/shaders/ExplodeMesh.geometryShader","res/shaders/ExplodeMesh.fragmentShader");
+	//Shader* shader = new Shader("res/shaders/Explode.vs","res/shaders/Explode.gs","res/shaders/Explode.fs");
+	Shader* shader = new Shader("res/shaders/Lights.vs", "poop", "res/shaders/Lights.fs");
 	
 
 	//Model* icoSphereModel = new Model("IcoSphere.obj");
