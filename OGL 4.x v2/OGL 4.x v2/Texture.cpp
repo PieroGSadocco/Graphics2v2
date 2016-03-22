@@ -2,7 +2,7 @@
 
 #include "Logger.h"
 
-Texture::Texture(char* _filename, GLuint _wrapping, GLuint _minFilter, GLuint _magFilter, bool _mipmap)
+Texture::Texture(const char* _filename, GLuint _wrapping, GLuint _minFilter, GLuint _magFilter, bool _mipmap)
 {
 	loadBMP(_filename);
 }
@@ -24,7 +24,7 @@ void Texture::UnBind()
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::loadBMP(const char* _filename, GLuint _wrapping, GLuint _minFilter, GLuint _magFilter, bool _mipmap)
+bool Texture::loadBMP(const char* _filename, GLuint _wrapping, GLuint _minFilter, GLuint _magFilter, bool _mipmap)
 {
 	unsigned char header[54];
 	unsigned int dataPos;
@@ -39,21 +39,21 @@ void Texture::loadBMP(const char* _filename, GLuint _wrapping, GLuint _minFilter
 	{
 		str += "ERROR: Texture BMP: \""; str += _filename; str += "\"Not found.";
 		Logger::Log(str);
-		return;
+		return false;
 	}
 
 	if (fread(header, 1, 54, file) != 54)
 	{
 		str += "ERROR:\nTexture BMP:\""; str += _filename; str += "\"Invalid (fread != 54).";
 		Logger::Log(str);
-		return;
+		return false;
 	}
 
 	if (header[0] != 'B' || header[1] != 'M')
 	{
 		str += "ERROR:Texture BMP:\""; str += _filename; str += "\"Invalid (header[0] != 'B' [1] != 'M').";
 		Logger::Log(str);
-		return;
+		return false;
 	}
 
 	dataPos = *(int*)&(header[0x0A]);
@@ -92,4 +92,6 @@ void Texture::loadBMP(const char* _filename, GLuint _wrapping, GLuint _minFilter
 
 	str = ""; str += "Texture BMP: \""; str += _filename; str += "\" Loaded Properly.\n";
 	Logger::Log(str);
+
+	return true;
 }

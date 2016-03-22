@@ -21,6 +21,7 @@ class DirectionalLight
 {
 public:
 	DirectionalLight();
+	DirectionalLight(float _oriX, float _oriY, float _oriZ, float _colR, float _colG, float _colB);
 	~DirectionalLight();
 
 	void Bind(GLint _shaderMatrixUniform);

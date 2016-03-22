@@ -67,9 +67,6 @@
     <ClCompile Include="Camera.cpp">
       <Filter>C++</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>C++</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>C++</Filter>
     </ClCompile>
@@ -94,6 +91,9 @@
     <ClCompile Include="Mesh2.cpp">
       <Filter>C++</Filter>
     </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>C++</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataPack.h">
@@ -101,9 +101,6 @@
     </ClInclude>
     <ClInclude Include="Input.h">
       <Filter>TODO\GEN</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>TODO\ORG</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>TODO\ORG</Filter>
@@ -141,31 +138,29 @@
     <ClInclude Include="Loader.h">
       <Filter>H\API</Filter>
     </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>H</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>H</Filter>
-    </ClInclude>
-    <ClInclude Include="SpotLight.h">
-      <Filter>H</Filter>
-    </ClInclude>
-    <ClInclude Include="AmbientLight.h">
-      <Filter>H</Filter>
-    </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>H</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh2.h">
       <Filter>H\API</Filter>
     </ClInclude>
     <ClInclude Include="MeshOGL.h">
       <Filter>STRUCTS</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\ExplodeMesh.vertexShader">
-      <Filter>RES\SHADERS</Filter>
-    </None>
+    <ClInclude Include="AmbientLight.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>H\API</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

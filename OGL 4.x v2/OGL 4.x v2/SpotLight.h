@@ -30,6 +30,7 @@ class SpotLight
 {
 public:
 	SpotLight();
+	SpotLight(float _posX, float _posY, float _posZ, float _colR, float _colG, float _colB, float _oriX, float _oriY, float _oriZ, float _constant, float _linear, float _quadratic, float _innerCutOff, float _outerCutOff);
 	~SpotLight();
 
 	void Bind(GLint _shaderMatrixUniform1, GLint _shaderMatrixUniform2);

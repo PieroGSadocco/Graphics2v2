@@ -19,6 +19,8 @@ public:
 	GLint GetUniform(char* _str);
 	void SetGlUniform4f(GLint _uniform, float _xr, float _yg, float _zb, float _wa);
 
+	GLint GetShaderProgram() { return shaderProgram; };
+
 private:
 	GLint vertexShader;
 	GLint fragmentShader;

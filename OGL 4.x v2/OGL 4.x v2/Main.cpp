@@ -3,6 +3,8 @@
 #pragma comment(lib, "glew32.lib")
 #pragma comment(lib, "assimpd.lib")
 
+#include <thread> 
+
 #include <crtdbg.h>
 #include <Windows.h>
 
@@ -17,8 +19,7 @@
 #include "Object.h"
 #include "Camera.h"
 
-#include "Light.h"
-
+#include "LightManager.h"
 #include "AmbientLight.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
@@ -28,22 +29,52 @@
 #include "glm\gtc\matrix_transform.hpp"
 #include "glm\gtc\type_ptr.hpp"
 
+void loadTexture(HDC hDC, HGLRC mainContext, Texture** tex, std::string _path)
+{
+	HGLRC hRC = wglCreateContext(hDC);
+	wglMakeCurrent(hDC, hRC);
+	BOOL error = wglShareLists(mainContext, hRC);
+	if (error == FALSE)
+	{
+		DWORD errorCode = GetLastError();
+		LPVOID lpMsgBuf;
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
+		MessageBox(NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION);
+		LocalFree(lpMsgBuf);
+		//Destroy the GL context and just use 1 GL context
+		wglDeleteContext(hRC);
+	}
+	*tex = new Texture(_path.c_str());
+	wglMakeCurrent(hDC, NULL);
+}
+
+void loadShader(HDC hDC, HGLRC mainContext, Shader** shad, std::string _pathvs, std::string _pathgs, std::string _pathfs)
+{
+	HGLRC hRC = wglCreateContext(hDC);
+	wglMakeCurrent(hDC, hRC);
+	BOOL error = wglShareLists(mainContext, hRC);
+	if (error == FALSE)
+	{
+		DWORD errorCode = GetLastError();
+		LPVOID lpMsgBuf;
+		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			NULL, errorCode, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&lpMsgBuf, 0, NULL);
+		MessageBox(NULL, (LPCTSTR)lpMsgBuf, "Error", MB_OK | MB_ICONINFORMATION);
+		LocalFree(lpMsgBuf);
+		//Destroy the GL context and just use 1 GL context
+		wglDeleteContext(hRC);
+	}
+	*shad = new Shader(_pathvs, _pathgs, _pathfs);
+	wglMakeCurrent(hDC, NULL);
+}
+
+
+
 int main()
 {
-	//std::string str1 = "45";
-	//std::string str2 = "3.14159";
-	//std::string str3 = "31337 with words";
-	//std::string str4 = "words and 2";
-	//
-	//int myint1;
-	//std::stoi(str1, &myint1,10);
-	//int myint2 = std::stoi(str2);
-	//int myint3 = std::stoi(str3);
-
-
-
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//_CrtSetBreakAlloc(1181);
+	//_CrtSetBreakAlloc(1532);
 
 	MoveWindow(GetConsoleWindow(), 0, 0, 1024, 800, true);
 
@@ -57,6 +88,58 @@ int main()
 	WindowOGL4x* window = new WindowOGL4x("Game Name", "A", 1124, 0, 1024, 720, 4, 5);
 
 	Logger::Log("LOADING/COMPILING SHADERS");
+
+	Texture* diffuseMap;
+	Texture* normalMap;
+	Texture* cubeMap;
+
+	Mesh* mesh = new Mesh();
+	Mesh* cubeMesh = new Mesh("res/cube.obj");
+
+	Shader* lightShader;// = new Shader("res/shaders/Lights.vs", "", "res/shaders/Lights.fs");
+	Shader* explodeShader;// = new Shader("res/shaders/Explode.vs", "res/shaders/Explode.gs", "res/shaders/Explode.fs");
+	Shader* skyboxShader;// = new Shader("res/shaders/Skybox.vs", "empty", "res/shaders/Skybox.fs");
+
+
+
+	wglMakeCurrent(window->hDC, NULL); // thanks microsoft
+	std::thread t_empty1(loadTexture, window->hDC, window->hRC, &diffuseMap, "res/154.bmp");
+	while (t_empty1.joinable())
+		t_empty1.join();
+	wglMakeCurrent(window->hDC, NULL); // thanks microsoft
+	std::thread t_empty2(loadTexture, window->hDC, window->hRC, &normalMap, "res/154_norm.bmp");
+	while (t_empty2.joinable())
+		t_empty2.join();
+	wglMakeCurrent(window->hDC, NULL); // thanks microsoft
+	std::thread t_empty3(loadTexture, window->hDC, window->hRC, &cubeMap, "res/cube.bmp");
+	while (t_empty3.joinable())
+		t_empty3.join();
+
+
+
+	wglMakeCurrent(window->hDC, NULL); // thanks microsoft
+	std::thread t_empty4(loadShader, window->hDC, window->hRC, &lightShader, "res/shaders/Lights.vs", "", "res/shaders/Lights.fs");
+	while (t_empty4.joinable())
+		t_empty4.join();
+	wglMakeCurrent(window->hDC, NULL); // thanks microsoft
+	std::thread t_empty5(loadShader, window->hDC, window->hRC, &explodeShader, "res/shaders/Explode.vs", "res/shaders/Explode.gs", "res/shaders/Explode.fs");
+	while (t_empty5.joinable())
+		t_empty5.join();
+	wglMakeCurrent(window->hDC, NULL); // thanks microsoft
+	std::thread t_empty6(loadShader, window->hDC, window->hRC, &skyboxShader, "res/shaders/Skybox.vs", "empty", "res/shaders/Skybox.fs");
+	while (t_empty6.joinable())
+		t_empty6.join();
+
+	wglMakeCurrent(window->hDC, window->hRC);
+
+
+
+
+
+
+
+
+
 
 	// InitGL
 	glViewport(0, 0, window->GetWidth(), window->GetHeight());
@@ -76,79 +159,46 @@ int main()
 	GetCursorPos(&oldMousePos);
 
 	// SHADERS
-	//Shader* shader = new Shader();
-	//Shader* shaderExplodeMesh = new Shader("res/shaders/ExplodeMesh.vertexShader","res/shaders/ExplodeMesh.geometryShader","res/shaders/ExplodeMesh.fragmentShader");
-	//Shader* shader = new Shader("res/shaders/Explode.vs","res/shaders/Explode.gs","res/shaders/Explode.fs");
-	Shader* shader = new Shader("res/shaders/Lights.vs", "poop", "res/shaders/Lights.fs");
 	
 
-	//Model* icoSphereModel = new Model("IcoSphere.obj");
-	//Model* hiPolyIcoSphereModel = new Model("hiPolyIcoSphere.obj");
-	//Model* cubeMeshModel = new Model("res/cube.obj");
-	
 	// MESHES
-	Mesh* mesh = new Mesh();
-	Mesh* icoSphere = new Mesh("IcoSphere.obj");
-	//Mesh* hiPolyIcoSphere = new Mesh("hiPolyIcoSphere.obj");
-	Mesh* cubeMesh = new Mesh("res/cube.obj");
+	
 
 	// TEXTURES
-	//Texture* texture = new Texture("abstract-colorful-clouds-2560x1600-wallpaper-16983.bmp");
-	Texture* diffuseMap = new Texture("res/154.bmp");
-	Texture* normalMap = new Texture("res/154_norm.bmp");
-	Texture* cubeMap = new Texture("res/cube.bmp");
 	
+
 	//MODELS
 	Model* monkey = new Model("res/monkey.model");
-	monkey->shader = shader;
+	monkey->shader = lightShader;
 	monkey->diffuse = diffuseMap;
 	monkey->normalMap = normalMap;
 	monkey->objectMatrix.Translate(0.0f, 0.0f, -2.5f);
-
+	
+	Model* skybox = new Model("res/models/skybox.model");
+	skybox->shader = skyboxShader;
+	skybox->diffuse = cubeMap;
+	
 	// OBJECTS
 	Object* cube = new Object();
-	//cube->model = cubeMeshModel;
 	cube->mesh = cubeMesh;
 	cube->diffuse = cubeMap;
-	cube->shader = shader;
-
-	Object* object = new Object();
-	//object->model = icoSphereModel;
-	object->mesh = icoSphere;
-	object->shader = shader;
-	object->diffuse = diffuseMap;
-	object->normalMap = normalMap;
-
-	//Object* object2 = new Object();
-	//object2->model = hiPolyIcoSphereModel;
-	//object2->mesh = hiPolyIcoSphere;
-	//object2->shader = shader;
-	//object2->diffuse = diffuseMap;
-	//object2->normalMap = normalMap;
-	//object2->objectMatrix.Translate(0.0f, 2.0f, 0.0f);
-
-	Object* floor = new Object();
-//	floor->model = cubeMeshModel;
-	floor->mesh = mesh;
-	floor->shader = shader;
-	floor->diffuse = diffuseMap;
-	floor->normalMap = normalMap;
-	floor->objectMatrix.Translate(0.0f, -2.0f, 0.0f);
-	floor->objectMatrix.Rotate(90.0f/180.0f*3.141592f, 1.0f, 0.0f, 0.0f);
-	floor->objectMatrix.Scale(5.0f, 0.1f, 5.0f);
+	cube->shader = skyboxShader;
 
 	Matrix* projection = new Matrix();
 	projection->SetProjection(45.0f, (float)window->GetWidth(), (float)window->GetHeight(), 0.1f, 100.0f);
-	
+
 	Camera* camera = new Camera();
+	Camera* skyboxCamera = new Camera();
 
 	// LIGHT
+	LightManager* lightManager = new LightManager(10);	
+
 	AmbientLight* aLight = new AmbientLight();
 	aLight->SetColorRGB(0.025f, 0.025f, 0.025f);
 
 	DirectionalLight* dLight = new DirectionalLight();
 	dLight->SetOrientationXYZ(0.0f, -1.0f, 0.0f);
-	dLight->SetColorRGB(0.5f, 0.5f, 0.5f);
+	dLight->SetColorRGB(0.7f, 0.7f, 0.7f);
 	dLight->SetIntensityF(1.0f);
 
 	PointLight* pLight = new PointLight();
@@ -166,6 +216,49 @@ int main()
 	sLight->SetLinearF(0.09f);
 	sLight->SetQuadraticF(0.032f);
 	sLight->SetCutOffsFF(5.5f, 10.0f);
+
+	//const unsigned int ambLightIndex = 0;
+	//const unsigned int dirLightIndex = 1;
+	//
+	//// AMBIENT
+	//GLuint uniformBlockIndex = glGetUniformBlockIndex(shader->GetShaderProgram(), "ambientLights");
+	//glUniformBlockBinding(shader->GetShaderProgram(), uniformBlockIndex, ambLightIndex);
+	// 
+	//float amb3[] = { 3.0f,0.0f,0.0f,0.0f,	
+	//	0.2f,0.0f,0.0f,0.0f,
+	//	0.0f,0.2f,0.0f,0.0f,
+	//	0.0f,0.0f,0.2f,0.0f};
+	//GLuint uboAmbientLights;
+	//glGenBuffers(1, &uboAmbientLights);
+	//glBindBuffer(GL_UNIFORM_BUFFER, uboAmbientLights);
+	//glBufferData(GL_UNIFORM_BUFFER, 1 * sizeof(amb3), NULL, GL_STATIC_DRAW);
+	//glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	//
+	//glBindBufferRange(GL_UNIFORM_BUFFER, ambLightIndex, uboAmbientLights, 0, 1 * sizeof(amb3));
+	//
+	//glBindBuffer(GL_UNIFORM_BUFFER, uboAmbientLights);
+	//glBufferSubData(GL_UNIFORM_BUFFER, 0, 1 * sizeof(amb3), &amb3);
+	//glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	//
+	//// DIRECTIONAL
+	//GLuint uniformBlockIndex2 = glGetUniformBlockIndex(shader->GetShaderProgram(), "DirectionalLights");
+	//glUniformBlockBinding(shader->GetShaderProgram(), uniformBlockIndex2, dirLightIndex);
+	//
+	//float dir3[] = { 3.0f,0.0f,0.0f,0.0f,
+	//	0.2f,0.0f,0.0f,0.0f,
+	//	0.0f,0.2f,0.0f,0.0f,
+	//	0.0f,0.0f,0.2f,0.0f };
+	//GLuint uboDirectionalLights;
+	//glGenBuffers(1, &uboDirectionalLights);
+	//glBindBuffer(GL_UNIFORM_BUFFER, uboDirectionalLights);
+	//glBufferData(GL_UNIFORM_BUFFER, 1 * sizeof(dir3), NULL, GL_STATIC_DRAW);
+	//glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	//
+	//glBindBufferRange(GL_UNIFORM_BUFFER, dirLightIndex, uboDirectionalLights, 0, 1 * sizeof(dir3));
+	//
+	//glBindBuffer(GL_UNIFORM_BUFFER, uboDirectionalLights);
+	//glBufferSubData(GL_UNIFORM_BUFFER, 0, 1 * sizeof(dir3), &dir3);
+	//glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// Loop
 	for (;;)
@@ -219,19 +312,21 @@ int main()
 				dLightDir -= 0.01f;
 			if (GetAsyncKeyState('X'))
 				dLightDir += 0.01f;
+			dLightDir += 0.001f;
 			
 			dLight->SetOrientationXYZ(-sin(dLightDir), -cos(dLightDir), -0.3f);
 
 			GetCursorPos(&mousePos);
-			
+
 			camera->RotateLocalX((mousePos.y - oldMousePos.y)*0.001f);
 			camera->RotateGlobalY((mousePos.x - oldMousePos.x)*0.001f);
+			skyboxCamera->RotateLocalX((mousePos.y - oldMousePos.y)*0.001f);
+			skyboxCamera->RotateGlobalY((mousePos.x - oldMousePos.x)*0.001f);
 
 			SetCursorPos(300, 300);
 			GetCursorPos(&oldMousePos);
 
 			// update
-			object->objectMatrix.Rotate(0.001f, 0.1f, 1.0f, 0.0f);
 			pLight->SetPositionXYZ(camera->position.x, camera->position.y, camera->position.z);
 
 
@@ -241,34 +336,65 @@ int main()
 
 			// create matrix
 			Matrix viewMatrix;
-			viewMatrix.Multiply(projection->GetMatrix(), camera->getViewMatrix());
 
 			//Render
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
+
 			// bind
-			shader->Bind();
+			lightShader->Bind();
 
-			viewMatrix.Bind(shader->GetUniform("viewMatrix"));
-			camera->Bind(shader->GetUniform("cameraPos"));
+			viewMatrix.Bind(lightShader->GetUniform("viewMatrix"));
+			//projection->Bind(shader->GetUniform("viewMatrix"));
 
-			aLight->Bind(shader->GetUniform("ambientLight"));
-			dLight->Bind(shader->GetUniform("directionalLight"));
-			pLight->Bind(shader->GetUniform("pointLight"));
-			sLight->Bind(shader->GetUniform("spotLight"), shader->GetUniform("spotCutOffs"));
+			lightManager->Bind(
+				lightShader->GetShaderProgram(),
+				lightShader->GetUniform("Lights"),
+				lightShader->GetUniform("directionalLight_data"),
+				lightShader->GetUniform("pointLight_data"),
+				lightShader->GetUniform("spotLight_data"));
+
+			aLight->Bind(lightShader->GetUniform("ambientLight"));
+			dLight->Bind(lightShader->GetUniform("directionalLight"));
+			pLight->Bind(lightShader->GetUniform("pointLight"));
+			sLight->Bind(lightShader->GetUniform("spotLight"), lightShader->GetUniform("spotCutOffs"));
 			
 			// draw
-			//object->Draw();
-			//object2->Draw();
-			floor->Draw();
-			//cube->Draw();
+			viewMatrix.Multiply(projection->GetMatrix(), skyboxCamera->getViewMatrix());
+			skybox->objectMatrix.Scale(-1.0f, -1.0f, -1.0f);
+			skybox->Draw(&viewMatrix, camera);
+			skybox->objectMatrix.Scale(-1.0f, -1.0f, -1.0f);
+			glClear(GL_DEPTH_BUFFER_BIT);
+			viewMatrix.Multiply(projection->GetMatrix(), camera->getViewMatrix());
 
-			
+			// all lights
+			monkey->objectMatrix.Translate(-3.0f, 0.0f, 0.0f);
+			monkey->shader = lightShader;
+			monkey->Draw(&viewMatrix, camera);
+			// explode
+			monkey->objectMatrix.Translate(+3.0f, 0.0f, 0.0f);
+			monkey->shader = explodeShader;
+			monkey->Draw(&viewMatrix, camera);
+			// skybox
+			monkey->objectMatrix.Translate(+3.0f, 0.0f, 0.0f);
+			monkey->shader = skyboxShader;
+			monkey->Draw(&viewMatrix, camera);
 
-			monkey->Draw();
+			monkey->objectMatrix.Translate(-3.0f, 0.0f, 0.0f);
+
+			skybox->diffuse = diffuseMap;
+			skybox->shader = lightShader;
+			skybox->objectMatrix.Translate(0.0f, 0.0f, -4.0f);
+			skybox->Draw(&viewMatrix, camera);
+			skybox->diffuse = cubeMap;
+			skybox->shader = skyboxShader;
+			skybox->objectMatrix.Translate(0.0f, 0.0f, +4.0f);
 
 			// unbind
-			shader->UnBind();
+			lightShader->UnBind();
+
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glViewport(0, 0, 1024, 768);
 			
 			SwapBuffers(window->GetHDC());
 		}
@@ -280,13 +406,13 @@ int main()
 	delete dLight;
 	delete pLight;
 
+	delete lightManager;
+
 	//objects
 	delete cube;
-	delete floor;
-	delete object;
-	//delete object2;
 
 	delete camera;
+	delete skyboxCamera;
 	delete projection;
 
 	//textures
@@ -297,14 +423,16 @@ int main()
 	//meshes
 	delete cubeMesh;
 	delete mesh;
-	delete icoSphere;
 	//delete hiPolyIcoSphere;
 
 	// MODELS
 	delete monkey;
+	delete skybox;
 
 	//shaders
-	delete shader;
+	delete lightShader;
+	delete explodeShader;
+	delete skyboxShader;
 	
 	delete window;
 }

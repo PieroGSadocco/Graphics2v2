@@ -21,6 +21,9 @@ public:
 	unsigned int GetWidth(){ return width; }
 	unsigned int GetHeight(){ return height; }
 
+	HDC hDC;
+	HGLRC hRC;
+
 private:
 	char* strGameName;
 
@@ -34,15 +37,13 @@ private:
 	short glMinorVersion;
 
 	MSG msg;
-	HDC hDC;
 
 	//
 
-	HINSTANCE hInstance;
 	HWND hWnd;
+	HINSTANCE hInstance;
 	DWORD wndStyle;
 
-	HGLRC hRC;
 
 	char* strWndClassName;
 

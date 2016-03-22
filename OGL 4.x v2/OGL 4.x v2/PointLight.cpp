@@ -5,6 +5,23 @@ PointLight::PointLight()
 
 }
 
+PointLight::PointLight(float _posX, float _posY, float _posZ, float _colR, float _colG, float _colB, float _constant, float _linear, float _quadratic)
+{
+	data[0].x = _posX;
+	data[0].y = _posY;
+	data[0].z = _posZ;
+
+	data[1].x = _colR;
+	data[1].y = _colG;
+	data[1].z = _colB;
+
+	data[2].x = _constant;
+
+	data[2].y = _linear;
+
+	data[2].z = _quadratic;
+}
+
 PointLight::~PointLight()
 {
 

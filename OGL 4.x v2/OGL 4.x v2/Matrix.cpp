@@ -2,7 +2,7 @@
 
 Matrix::Matrix()
 {
-
+	mat = glm::mat4();
 }
 
 Matrix::~Matrix()

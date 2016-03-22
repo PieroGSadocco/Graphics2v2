@@ -5,6 +5,17 @@ DirectionalLight::DirectionalLight()
 
 }
 
+DirectionalLight::DirectionalLight(float _oriX, float _oriY, float _oriZ, float _colR, float _colG, float _colB)
+{
+	data[0].x = _oriX;
+	data[1].x = _oriY;
+	data[2].x = _oriZ;
+
+	data[0].y = _colR;
+	data[1].y = _colG;
+	data[2].y = _colB;
+}
+
 DirectionalLight::~DirectionalLight()
 {
 

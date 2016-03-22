@@ -12,16 +12,25 @@ OPENING WINDOW
 	Created an WindowOGL with context:
 		4.4
 	Maximum number of 4-component vertex attributes supported: 16
+	Maximum number of UBOs supported: 70
+	Maximum UBO block size supported: 65536
+	Maximum number of assigneble UBO locations supported: 4096
 WINDOW OPENING COMPLETE
 
 LOADING/COMPILING SHADERS
-ERROR: Failed to open: "poop";
-Shaders Loaded/Compiled SUCCESS
-
 Texture BMP: "res/154.bmp" Loaded Properly.
 
 Texture BMP: "res/154_norm.bmp" Loaded Properly.
 
 Texture BMP: "res/cube.bmp" Loaded Properly.
 
+ERROR: Failed to open: "";
+Shaders Loaded/Compiled SUCCESS
+
+Shaders Loaded/Compiled SUCCESS
+
+ERROR: Failed to open: "empty";
+Shaders Loaded/Compiled SUCCESS
+
+Maximum number of ambient lights supported: 4096 (Bacause it's super necessary to have more than one!)
 CLOSING WINDOW

@@ -24,6 +24,7 @@ class PointLight
 {
 public:
 	PointLight();
+	PointLight(float _posX, float _posY, float _posZ, float _colR, float _colG, float _colB, float _constant, float _linear, float _quadratic);
 	~PointLight();
 
 	void Bind(GLint _shaderMatrixUniform);

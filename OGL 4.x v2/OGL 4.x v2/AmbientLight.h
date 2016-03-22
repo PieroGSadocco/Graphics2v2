@@ -12,6 +12,7 @@ class AmbientLight
 {
 public:
 	AmbientLight();
+	AmbientLight(float _r, float _g, float _b);
 	~AmbientLight();
 
 	void Bind(GLint _shaderMatrixUniform);

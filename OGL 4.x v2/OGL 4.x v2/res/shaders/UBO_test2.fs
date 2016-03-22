@@ -1,18 +1,5 @@
 #version 330 core
 
-//in VS_OUT
-//{
-//	vec3 color;
-//	vec4 vertexColor;
-//	
-//	vec3 FragPos;
-//	vec2 TexCoord;
-//	
-//	vec3 Normal;
-//	vec3 Tangent;
-//	vec3 BiTangent;
-//} fs_in;
-
 in VS_OUT
 {
 	vec3 color;
@@ -24,13 +11,21 @@ in VS_OUT
 	vec3 Normal;
 	vec3 Tangent;
 	vec3 BiTangent;
-	
-	vec3 TangentLightPos;
-    vec3 TangentViewPos;
-    vec3 TangentFragPos;
 } fs_in;
 
 in vec4 vertexColor;
+
+layout (std140) uniform directionalLights
+{
+	vec4 numDirectionalLightsPadPadPad;
+    vec4 dir[3];
+};
+layout (std140) uniform ambientLights
+{
+	vec4 numAmbientLightsPadPadPad;
+    vec4 amb[3];
+};
+
 
 out vec4 color;
 
@@ -68,8 +63,6 @@ void main()
 
 
 
-//												// ambient light
-	ambient = ambientLight;
 
 //												// directional light
 // organize data	
@@ -152,7 +145,36 @@ void main()
 	spotSpecular *= spotAttenuation;
 
 	spot = spotDiffuse + spotSpecular;
-
-	color = texture(diffuseMap, fs_in.TexCoord) * vec4( ambient + directional + point + spot, 1.0);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	vec4 ambientLight = 	vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	for(int i = 0; i < numAmbientLightsPadPadPad.x; ++i)
+	{
+		ambientLight = ambientLight + amb[i];
+	}
+	
+	vec4 directionalLight = 	vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	
+	
+	
+	color = texture(diffuseMap, fs_in.TexCoord) * (vec4( ambient + point + spot, 1.0) + ambientLight);
+	//color = texture(diffuseMap, fs_in.TexCoord) * (vec4( ambient + directional + point + spot, 1.0) + ambientLight);
 //	color = vec4(1.0) * vec4( ambient + directional + point + spot, 1.0);
 }

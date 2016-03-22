@@ -4,6 +4,13 @@ AmbientLight::AmbientLight()
 {
 }
 
+AmbientLight::AmbientLight(float _r, float _g, float _b)
+{
+	data.x = _r;
+	data.y = _g;
+	data.z = _b;
+}
+
 AmbientLight::~AmbientLight()
 {
 }

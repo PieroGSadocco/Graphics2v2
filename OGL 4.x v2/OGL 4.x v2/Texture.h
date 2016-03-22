@@ -11,7 +11,7 @@
 class Texture
 {
 public:
-	Texture(char* _filename, GLuint _wrapping = GL_REPEAT, GLuint _minFilter = GL_LINEAR_MIPMAP_LINEAR, GLuint _magFilter = GL_LINEAR, bool _mipmap = true);
+	Texture(const char* _filename, GLuint _wrapping = GL_REPEAT, GLuint _minFilter = GL_LINEAR_MIPMAP_LINEAR, GLuint _magFilter = GL_LINEAR, bool _mipmap = true);
 	~Texture();
 
 	void Bind(GLint _GL_TEXTURENUM, GLint _uniformLocation, short _glTexNum);
@@ -25,7 +25,7 @@ private:
 	Third and fourth is filtering mode (GL_LINEAR(Default Mag), GL_NEAREST, GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR_MIPMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_LINEAR(Default Min));
 	Fifth is mipmap, true by default
 	*/
-	void loadBMP(const char* _filename, GLuint _wrapping = GL_REPEAT, GLuint _minFilter = GL_LINEAR_MIPMAP_LINEAR, GLuint _magFilter = GL_LINEAR, bool _mipmap = true);
+	bool loadBMP(const char* _filename, GLuint _wrapping = GL_REPEAT, GLuint _minFilter = GL_LINEAR_MIPMAP_LINEAR, GLuint _magFilter = GL_LINEAR, bool _mipmap = true);
 	unsigned int width, height;
 };
 

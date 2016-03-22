@@ -271,6 +271,21 @@ WindowOGL4x::WindowOGL4x(char* _strGameName, char* _strWndClassName, int _x, int
 	str = std::string(""); str += "Maximum number of 4-component vertex attributes supported: "; str += std::to_string(nrAttributes);
 	Logger::Log(1, str);
 
+	glGetIntegerv(GL_MAX_COMBINED_UNIFORM_BLOCKS, &nrAttributes);
+	str = std::string(""); str += "Maximum number of UBOs supported: "; str += std::to_string(nrAttributes);
+	Logger::Log(1, str);
+
+	glGetIntegerv(GL_MAX_UNIFORM_BLOCK_SIZE, &nrAttributes);
+	str = std::string(""); str += "Maximum UBO block size supported: "; str += std::to_string(nrAttributes);
+	Logger::Log(1, str);
+
+	glGetIntegerv(GL_MAX_UNIFORM_LOCATIONS, &nrAttributes);
+	str = std::string(""); str += "Maximum number of assigneble UBO locations supported: "; str += std::to_string(nrAttributes);
+	Logger::Log(1, str);
+
+
+	
+
 
 	// Show Window
 	ShowWindow(hWnd, SW_NORMAL);

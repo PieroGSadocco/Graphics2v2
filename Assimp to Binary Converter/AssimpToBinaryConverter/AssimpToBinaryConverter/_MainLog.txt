@@ -7,5 +7,5 @@ What do you want to do?
 Selected 3;
 Please type the file name, if the file is not on the same directory as this .exe, add the directory;
 
-Loading "res/monkey.obj
-Model ASSIMP: "res/monkey.obj" LOADED;
+Loading "res/skybox.obj
+Model ASSIMP: "res/skybox.obj" LOADED;
